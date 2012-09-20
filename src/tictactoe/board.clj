@@ -16,8 +16,7 @@
   (apply map vector board))
 
 (defn row-or-column-winner [board]
-  (if-not (empty? (filter (fn [row-or-column] (= 1 (count (set row-or-column)))) board))
-    (first (first (filter (fn [row-or-column] (= 1 (count (set row-or-column)))) board)))))
+  (first (first (filter (fn [row-or-column] (= 1 (count (set row-or-column)))) board))))
 
 (defn diagonal-winner [board]
   (if (= (first (nth board 0)) (second (nth board 1)) (last (nth board 2)))
@@ -27,10 +26,6 @@
       nil)))
 
 (defn winner [board]
-  (if-let [winner (row-or-column-winner board)]
-    winner
-    (if-let [winner (row-or-column-winner (transpose board))]
-      winner
-      (if-let [winner (diagonal-winner board)]
-        winner
-        nil))))
+  (or (row-or-column-winner board)
+      (row-or-column-winner (transpose board))
+      (diagonal-winner board)))
