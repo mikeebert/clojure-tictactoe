@@ -1,7 +1,11 @@
 (ns tictactoe.consoleui)
 
-(defn greet []
-  (println "Hello and welcome to tic-tac-toe"))
+(defn display-board [board]
+  (map (fn [row] (println (str row))) board))
+
+(defn begin [board]
+  (println "Hello and welcome to tic-tac-toe")
+  (display-board board))
 
 (defn prompt-for-move []
   (println "Please make your next move:"))
@@ -16,5 +20,3 @@
       input
       (get-move spaces))))
 
-(defn display-board [board]
-  (map (fn [row] (println (str row))) board))
