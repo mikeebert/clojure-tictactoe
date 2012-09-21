@@ -1,7 +1,9 @@
 (ns tictactoe.board
   (:require [tictactoe.consoleui :refer [get-move]]))
 
-(def new-board (vec (range 1 10)))
+(def new-board [[1 2 3]
+                [4 5 6]
+                [7 8 9]])
 
 (defn position
   ([game-board move] (position game-board move 0))
@@ -11,7 +13,10 @@
         (recur game-board move (inc index)))))
 
 (defn place-move [move piece game-board]
-  (assoc game-board (position game-board move) piece))
+  (map (fn [row]
+         (if (some #(= move %) row)
+           (assoc row (position row move) piece)
+           row))game-board))
 
 (defn transpose [board]
   (apply map vector board))

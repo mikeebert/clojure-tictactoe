@@ -2,13 +2,22 @@
   (:require [speclj.core :refer :all]
             [tictactoe.board :refer :all]))
 
+(def fresh-board [[1 2 3]
+                  [4 5 6]
+                  [7 8 9]])
+
 (describe "Board"
-  
-  (it "should have 9 spaces"
-    (should= 9 (count new-board)))
+
+  (it "should have new board"
+    (should= fresh-board new-board))
+
+  (it "should flatten an array of arrays"
+    (should= [1 2 3 4 5 6 7 8 9] (flatten fresh-board)))
 
   (it "should allow a move to be made on the board"
-    (should= [1 "x" 3 4 5 6 7 8 9] (place-move 2 "x" new-board)))
+    (should= [[1 "x" 3]
+              [4 5 6]
+              [7 8 9]] (place-move 2 "x" new-board)))
 
   (it "should return a diagonal winner"
     (should= "x" (diagonal-winner [["x" 1 2]
