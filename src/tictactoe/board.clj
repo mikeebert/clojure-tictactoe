@@ -1,4 +1,5 @@
-(ns tictactoe.board)
+(ns tictactoe.board
+  (:require [tictactoe.consoleui :refer [get-move]]))
 
 (def new-board (vec (range 1 10)))
 
@@ -29,3 +30,6 @@
   (or (row-or-column-winner board)
       (row-or-column-winner (transpose board))
       (diagonal-winner board)))
+
+(defn play-game []
+  (get-move []))
