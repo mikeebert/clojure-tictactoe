@@ -1,5 +1,4 @@
-(ns tictactoe.board
-  (:require [tictactoe.consoleui :refer [get-move]]))
+(ns tictactoe.board)
 
 (def new-board [[1 2 3]
                 [4 5 6]
@@ -11,6 +10,9 @@
       (if (= (nth game-board index) move)
         index
         (recur game-board move (inc index)))))
+
+(defn available-spaces [board]
+  (filter (fn [n] (= java.lang.Long (class n))) (flatten board)))
 
 (defn place-move [move piece game-board]
   (map (fn [row]
@@ -35,6 +37,3 @@
   (or (row-or-column-winner board)
       (row-or-column-winner (transpose board))
       (diagonal-winner board)))
-
-(defn play-game []
-  (get-move []))

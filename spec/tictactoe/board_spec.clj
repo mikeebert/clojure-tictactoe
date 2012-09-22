@@ -14,6 +14,11 @@
   (it "should flatten an array of arrays"
     (should= [1 2 3 4 5 6 7 8 9] (flatten fresh-board)))
 
+  (it "should return the avaialable spaces on a board"
+    (should= [1 3 5 7 8] (available-spaces [[1 "x" 3]
+                                            ["x" 5 "x"]
+                                            [7 8 "x"]] )))
+
   (it "should allow a move to be made on the board"
     (should= [[1 "x" 3]
               [4 5 6]
