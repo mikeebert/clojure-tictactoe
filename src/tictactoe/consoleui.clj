@@ -1,11 +1,11 @@
 (ns tictactoe.consoleui)
 
 (defn display-board [board]
-  (map (fn [row] (println (str row))) board))
+  (doseq [row board]
+    (println (str " " (first row) " | " (second row) " | " (last row) "\n-----------" ))))
 
-(defn begin [board]
-  (println "Hello and welcome to tic-tac-toe")
-  (display-board board))
+(defn begin []
+  (println "Hello and welcome to tic-tac-toe."))
 
 (defn prompt-for-move []
   (println "Please make your next move:"))

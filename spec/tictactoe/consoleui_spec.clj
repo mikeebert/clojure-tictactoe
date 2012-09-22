@@ -2,6 +2,10 @@
   (:require [speclj.core :refer :all]
             [tictactoe.consoleui :refer :all]))
 
+(def board [[1 2 3]
+            [4 5 6]
+            [7 8 9]])
+
 (describe "Console"
 
   (it "should convert a string entry into an integer"
@@ -16,9 +20,8 @@
 
   (it "should get a move"
     (with-redefs [read-line (constantly "1")]
-      (should= (get-move [1 2 3]) 1)))
+      (should= 1 (get-move [1 2 3]))))
   
   (it "should display the board"
-    (display-board [[1 2 3]
-                    [4 5 6]
-                    [7 8 9]])))
+    (with-redefs [println (constantly true)]
+    (should= true (display-board board)))))
