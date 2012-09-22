@@ -1,17 +1,29 @@
 (ns tictactoe.game-spec
   (:require [speclj.core :refer :all]
             [tictactoe.game :refer :all]
-            [tictactoe.consoleui :as console]))
+            [tictactoe.board :refer [winner place-move]]
+            [tictactoe.consoleui :as console]
+            [tictactoe.consoleui :refer [display-board get-move]]))
+
+(def mock-board [[][][]])
 
 (describe "Game"
   
-  (it "should fire off the greeting and display a new board"
-    (with-redefs [console/begin (fn [x] x)
-                  console/display-board (fn [x] x)]
-    (should= [[1 2 3]
-              [4 5 6]
-              [7 8 9]] (start))))
+  ;(it "should tell the UI to begin"
+    ;(with-redefs [console/begin (constantly true)]
+    ;(should= true (start))))
   
-  (it "should send the baord to the console"
+  (it "should send the board to the console"
     (with-redefs [console/display-board (fn [x] x)]
-      (should= true (start)))))
+      (should= [1 2 3] (display-board [1 2 3]))))
+  
+  (it "should start a game loop that gets input and checks for a winner"
+    (with-redefs [get-move (constantly nil)
+                  println (constantly true)]
+      (should= true (game-loop mock-board "x"))))
+  
+  (it "can return the next player"
+    (should= "X" (next-up "O")))
+  
+  (it "can retun the next o player"
+    (should= "O" (next-up "X"))))
