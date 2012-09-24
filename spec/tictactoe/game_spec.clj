@@ -18,12 +18,12 @@
       (should= [1 2 3] (display-board [1 2 3]))))
   
   (it "should start a game loop that gets input and checks for a winner"
-    (with-redefs [get-move (constantly nil)
+    (with-redefs [get-move (fn [player spaces] nil)
                   println (constantly true)]
       (should= true (game-loop mock-board "x"))))
   
   (it "can return the next player"
     (should= "X" (next-up "O")))
   
-  (it "can retun the next o player"
+  (it "can return the next o player"
     (should= "O" (next-up "X"))))
