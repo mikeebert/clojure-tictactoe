@@ -2,3 +2,5 @@
 /target/
 /lib
 /.lein*
+
+.DS_Store
