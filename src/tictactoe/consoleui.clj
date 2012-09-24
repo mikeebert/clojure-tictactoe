@@ -13,14 +13,26 @@
 (defn parse-int [string]
   (Integer. (re-find #"[0-9]" string)))
 
-(defn get-move [player spaces]
+(defn get-human-move [player spaces]
   (prompt-for-move player)
   (try 
     (let [input (parse-int (read-line))]
       (if (some #(= input %) spaces)
         input
-        (do (println "Not a valid move.") (get-move player spaces))))
-    (catch Exception e (get-move player spaces))))
+        (do (println "Not a valid move.") (get-human-move player spaces))))
+    (catch Exception e (get-human-move player spaces))))
+
+(defn ai-get-move []
+  )
+
+(defn get-player-type [player-symbol]
+  (println (str "Would you like player " player-symbol " to be a human or computer?"))
+  (println "1. Human\n2. Computer")
+  (try (let [input (parse-int (read-line))]
+         (if (= input 1)
+           {:symbol player-symbol, :move get-human-move}
+           {:symbol player-symbol, :move ai-get-move}))
+    (catch Exception e (get-player-type player-symbol))))
 
 (defn winning-message [player]
   (println (str player " wins!")))

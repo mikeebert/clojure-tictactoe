@@ -3,7 +3,7 @@
             [tictactoe.game :refer :all]
             [tictactoe.board :refer [winner place-move]]
             [tictactoe.consoleui :as console]
-            [tictactoe.consoleui :refer [display-board get-move]]))
+            [tictactoe.consoleui :refer [display-board get-human-move]]))
 
 (def mock-board [[][][]])
 
@@ -18,7 +18,7 @@
       (should= [1 2 3] (display-board [1 2 3]))))
   
   (it "should start a game loop that gets input and checks for a winner"
-    (with-redefs [get-move (fn [player spaces] nil)
+    (with-redefs [get-human-move (fn [player spaces] nil)
                   println (constantly true)]
       (should= true (game-loop mock-board "x"))))
   
