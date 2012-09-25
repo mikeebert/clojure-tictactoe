@@ -19,6 +19,16 @@
                                             ["x" 5 "x"]
                                             [7 8 "x"]] )))
 
+  (it "should know if a board is full"
+    (should= true (full? [["x" "x" "x"]
+                          ["x" "x" "x"]
+                          ["x" "x" "x"]])))
+
+  (it "should not return true for full? if a board is in progress"
+    (should= false (full? [["x" "x" "x"]
+                          ["x" 5 "x"]
+                          ["x" "x" "x"]])))
+
   (it "should allow a move to be made on the board"
     (should= [[1 "x" 3]
               [4 5 6]

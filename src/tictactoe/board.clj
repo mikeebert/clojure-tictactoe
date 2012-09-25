@@ -20,6 +20,9 @@
            (assoc row (position row move) piece)
            row))game-board))
 
+(defn full? [board]
+  (not-any? integer? (flatten board)))
+
 (defn transpose [board]
   (apply map vector board))
 
