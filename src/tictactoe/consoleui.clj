@@ -2,7 +2,8 @@
 
 (defn display-board [board]
   (doseq [row board]
-    (println (str " " (first row) " | " (second row) " | " (last row) "\n-----------" ))))
+    (println (str " " (first row) " | " (second row) " | " (last row) "\n-----------" )))
+  (println))
 
 (defn greeting []
   (println "Hello and welcome to tic-tac-toe."))
