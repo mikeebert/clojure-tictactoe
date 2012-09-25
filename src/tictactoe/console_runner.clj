@@ -2,7 +2,7 @@
   (:require [tictactoe.consoleui :refer [greeting display-board
                                          get-player-type get-human-move
                                          winning-message tie-message]]
-            [tictactoe.board :refer [new-board available-spaces place-move winner]]
+            [tictactoe.board :refer [new-board available-spaces place-move winner full?]]
             [tictactoe.ai :refer [ai-move]]))
 
 (defn get-player [player-symbol] 
@@ -25,7 +25,7 @@
       (display-board game-board)
       (if-let [winning-player (winner game-board)]
         (winning-message winning-player)
-        (if (empty? (available-spaces game-board))
+        (if (full? game-board)
           (tie-message)
           (game-loop next-player player game-board)))))
 
