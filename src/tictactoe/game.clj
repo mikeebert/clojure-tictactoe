@@ -1,5 +1,5 @@
 (ns tictactoe.game
-  (:require [tictactoe.consoleui :refer [begin display-board get-human-move 
+  (:require [tictactoe.consoleui :refer [greeting display-board get-human-move 
                                          winning-message tie-message]]
             [tictactoe.board :refer [available-spaces new-board place-move winner]]))
 
@@ -20,6 +20,6 @@
         (game-loop game-board (next-up player))))))
 
 (defn start []
-  (begin)
+  (greeting)
   (display-board new-board)
   (game-loop new-board "X"))
