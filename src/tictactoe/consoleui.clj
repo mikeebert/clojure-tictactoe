@@ -4,7 +4,7 @@
   (doseq [row board]
     (println (str " " (first row) " | " (second row) " | " (last row) "\n-----------" ))))
 
-(defn begin []
+(defn greeting []
   (println "Hello and welcome to tic-tac-toe."))
 
 (defn prompt-for-move [player]
@@ -22,16 +22,10 @@
         (do (println "Not a valid move.") (get-human-move player spaces))))
     (catch Exception e (get-human-move player spaces))))
 
-(defn ai-get-move []
-  )
-
 (defn get-player-type [player-symbol]
   (println (str "Would you like player " player-symbol " to be a human or computer?"))
   (println "1. Human\n2. Computer")
-  (try (let [input (parse-int (read-line))]
-         (if (= input 1)
-           {:symbol player-symbol, :move get-human-move}
-           {:symbol player-symbol, :move ai-get-move}))
+  (try (parse-int (read-line))
     (catch Exception e (get-player-type player-symbol))))
 
 (defn winning-message [player]

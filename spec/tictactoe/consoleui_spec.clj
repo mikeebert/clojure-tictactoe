@@ -13,17 +13,19 @@
 
 (describe "Console"
 
-  (it "should set the type for a human player"
-    (with-redefs [println (constantly nil)
-                  get-human-move (constantly true)]
-      (with-in-str (make-input '(1))
-        (should= {:symbol "x" :move get-human-move} (get-player-type "x")))))
+  (it "should greet the user"
+    (with-redefs [println (constantly true)]
+      (should= true (greeting))))
 
-  (it "should set the type for a computer player"
+  (it "should ask the user for a type of player"
     (with-redefs [println (constantly nil)
-                  ai-get-move (constantly true)]
-      (with-in-str (make-input '(2))
-        (should= {:symbol "x" :move ai-get-move} (get-player-type "x")))))
+                  read-line (constantly "1")]
+      (should= 1 (get-player-type "x"))))
+
+  (it "should reject invalid input for a type of player and ask again"
+    (with-redefs [println (constantly nil)]
+      (with-in-str (make-input '("computer" "human" 1))
+        (should= 1 (get-player-type "X")))))
 
   (it "should prompt a player for a move"
     (with-redefs [prompt-for-move (fn [x] x)]
