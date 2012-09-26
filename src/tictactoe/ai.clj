@@ -22,12 +22,16 @@
       ;)))
 ;
 (defn win [player board depth]
-  (if (= player (winner board))
-    (- 100 depth)))
+  (if (= (:piece player) (winner board))
+    (if (= :max (:strategy player))
+      (- 100 depth)
+      (+ -100 depth))))
 
 (defn loss [opponent board depth]
   (if (= opponent (winner board))
-    (do (println "it got here") (+ -100 depth))))
+    (if (= :max (:strategy opponent))
+      (- 100 depth)
+      (+ -100 depth))))
 
 (defn draw [board]
   (if (full? board) 0))
@@ -38,12 +42,12 @@
       (draw board)))
  
 (defn minimax-score 
-  ([max-player min-player board depth] (minimax-score {:piece max-player :starting-score -5} 
-                                                      {:piece min-player :starting-score 5} 
+  ([max-player min-player board depth] (minimax-score {:strategy :max :piece max-player :starting-score -5} 
+                                                      {:strategy :min :piece min-player :starting-score 5} 
                                                       board (available-spaces board)
                                                       depth -100 100))
   ([player opponent board spaces depth alpha beta]
-    (or (value board (:piece player) (:piece opponent) depth)
+    (or (value board player opponent depth)
         (let [new-board (place-move (first spaces) (:piece player) board)]
-          (or (value new-board (:piece player) (:piece opponent) (inc depth))
+          (or (value new-board player opponent (inc depth))
               (minimax-score opponent player new-board (rest spaces) (inc depth) alpha beta))))))

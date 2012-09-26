@@ -18,8 +18,8 @@
                      ["o" 5 "o"]
                      ["o" "x" "o"]] )
 
-;(def max-player {:symbol "x" :starting-score -5})
-;(def min-player {:symbol "o" :starting-score 5})
+(def max-x-player {:strategy :max :piece "x" :starting-score -5})
+(def min-o-player {:stategy :min :piece "o" :starting-score 5})
 
 (describe "AI"
   
@@ -36,16 +36,16 @@
     (should (some #(= move %) [1 3 4 6 8 9]))))
   
   (it "should score a won board for a player"
-    (should= 99 (value won-board "x" "o" 1)))
+    (should= 99 (value won-board max-x-player min-o-player 1)))
 
   (it "should score a won board for an opponent"
     (should= -99 (value won-board "o" "x" 1)))
 
   (it "should score a draw board"
-    (should= 0 (value draw-board "o" "x" 1)))
+    (should= 0 (value draw-board min-o-player max-x-player 1)))
 
   (it "should not score a game in progress"
-    (should= nil (value one-move-x-win "o" "x" 6)))
+    (should= nil (value one-move-x-win min-o-player max-x-player 6)))
 
   (it "should return a won board with a score"
     (should= 93 (minimax-score "x" "o" won-board 7)))
