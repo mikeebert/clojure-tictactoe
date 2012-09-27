@@ -57,4 +57,24 @@
     (should= 99 (minimax-score "x" "o" one-move-x-win 0)))
   
   (it "should score for a loss in two moves"
-    (should= -98 (minimax-score "x" "o" two-move-o-win 0))))
+    (should= -98 (minimax-score "x" "o" two-move-o-win 0)))
+  
+  (it "should score for a win in three moves"
+    (should= 97 (minimax-score "x" "o" [["x" 2 3]
+                                        ["o" 5 "x"]
+                                        ["o" "x" "o"]] 0)))
+  
+  (it "should score for a loss in three moves"
+    (should= -96 (minimax-score "x" "o" [["o" "x" 3]
+                                         [4 "x" 6]
+                                         [7 "o" 9]] 0)))
+  
+  (it "should score a blank board"
+    (should= -95 (minimax-score "x" "o" [[1 2 3]
+                                         [4 5 6]
+                                         [7 8 9]] 0)))
+  
+  (it "should provide a value for all the moves"
+    (should= {4 99, 3 99, 2 97} (minimax-move "o" "x" [["x" 2 3]
+                                                       [4 "o" "x"]
+                                                       ["x" "o" "x"]]))))
