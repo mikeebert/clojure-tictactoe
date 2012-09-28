@@ -7,12 +7,16 @@
 (defn ai-move [p1-symbol p2-symbol board]
   (random-ai-move board))
 
+(defn abs [n]
+  (if (< n 0)
+    (- 0 n)
+    n))
 
 (defn set-max [piece]
-  {:strategy :max :piece piece :starting-score -5})
+  {:strategy :max :piece piece :starting-score -5 :best-score -5})
 
 (defn set-min [piece]
-  {:strategy :min :piece piece :starting-score 5})
+  {:strategy :min :piece piece :starting-score 5 :best-score 5})
 
 (defn win [player board depth]
   (if (= (:piece player) (winner board))
@@ -33,33 +37,32 @@
   (or (win player board depth)
       (loss opponent board depth)
       (draw board)))
- 
-;(defn minimax-score 
-  ;([max-piece min-piece board depth] (minimax-score (set-max max-piece) (set-min min-piece) 
-                                                    ;board (available-spaces board)
-                                                    ;depth))
-  ;([player opponent board spaces depth]
-        ;(let [spaces (available-spaces board)
-              ;new-board (place-move (first spaces) (:piece player) board)]
-              ;(minimax-score opponent player new-board (rest spaces) (inc depth)))))
 
-(defn minimax-score 
-  ([max-player min-player board depth] (minimax-score (set-max max-player) (set-min min-player)
-                                                      board (available-spaces board)
-                                                      depth))
-  ([player opponent board spaces depth]
-    (or (value board player opponent depth)
-        (let [new-board (place-move (first spaces) (:piece opponent) board)]
-          (or (value new-board player opponent (inc depth))
-              (minimax-score opponent player new-board (rest spaces) (inc depth)))))))
+(defn minimax-score [player opponent board depth]
+  (or (value board player opponent depth)
+      (if-not (empty? (available-spaces board))
+        (let [best-score (:starting-score player)
+              spaces (available-spaces board)
+              new-board (place-move (first spaces) (:piece opponent) board)
+              game-value (minimax-score opponent player new-board (inc depth))]
+          (if (> (abs game-value) (abs (opponent :best-score)))
+            (merge opponent {:best-score game-value})
+          (if (empty? (available-spaces board))
+            (do (println "it got here") (:best-score opponent))
+            (recur opponent player new-board (+ 2 depth))))))))
 
 (defn minimax-move 
-  ([p1_symbol p2_symbol board] (minimax-move p1_symbol p2_symbol board (available-spaces board) {}))
-  ([p1_symbol p2_symbol board spaces move-values]
-   (if-not (empty? spaces)
-     (let [depth 0
-           new-board (place-move (first spaces) p1_symbol board)
-           new-values (merge move-values {(first spaces) (minimax-score p1_symbol p2_symbol new-board (inc depth))})]
-      (recur p1_symbol p2_symbol board (rest spaces) new-values))
-     (println move-values))))
+  ([p1-symbol p2-symbol board] (minimax-move p1-symbol p2-symbol board 
+                                             (available-spaces board) {}))
+  ([p1-symbol p2-symbol board spaces move-values]
+   (let [max-player (set-max p1-symbol)
+         min-player (set-min p2-symbol)] 
+     (if-not (empty? spaces)
+       (let [depth 0
+             move (first spaces)
+             new-board (place-move move p1-symbol board)
+             new-values (merge move-values {move (minimax-score max-player min-player 
+                                                                new-board (inc depth))})]
+        (recur p1-symbol p2-symbol board (rest spaces) new-values))
+       (println move-values)))))
 

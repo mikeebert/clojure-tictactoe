@@ -18,8 +18,8 @@
                      ["x" 5 6]
                      ["o" "x" "o"]] )
 
-(def max-x-player {:strategy :max :piece "x" :starting-score -5})
-(def min-o-player {:stategy :min :piece "o" :starting-score 5})
+(def max-x-player {:strategy :max :piece "x" :starting-score -5 :best-score -5})
+(def min-o-player {:stategy :min :piece "o" :starting-score 5 :best-score 5})
 
 (describe "AI"
   
@@ -39,8 +39,8 @@
     (should= 99 (value won-board max-x-player min-o-player 1)))
 
   (it "should score a won board for an opponent"
-    (should= -99 (value won-board {:strategy :max :piece "o" :starting-score -5}
-                                  {:strategy :min :piece "x" :starting-score 5} 1)))
+    (should= -99 (value won-board {:strategy :max :piece "o" :best-score -5}
+                                  {:strategy :min :piece "x" :best-score 5} 1)))
 
   (it "should score a draw board"
     (should= 0 (value draw-board min-o-player max-x-player 1)))
@@ -49,13 +49,13 @@
     (should= nil (value one-move-win min-o-player max-x-player 6)))
 
   (it "should return a won board with a score"
-    (should= 93 (minimax-score "x" "o" won-board 7)))
+    (should= 93 (minimax-score max-x-player min-o-player won-board 7)))
 
   (it "should return a cat's game board with a score"
-    (should= 0 (minimax-score "x" "o" draw-board 7)))
+    (should= 0 (minimax-score max-x-player min-o-player draw-board 7)))
 
   (it "should score for a loss in one move"
-    (should= -99 (minimax-score "x" "o" one-move-win 0)))
+    (should= -99 (minimax-score max-x-player min-o-player one-move-win 0)))
   
   (it "should score for a loss in two moves"
     (should= -98 (minimax-score "x" "o" two-move-o-win 0)))
