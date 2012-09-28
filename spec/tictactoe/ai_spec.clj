@@ -2,7 +2,7 @@
   (:require [speclj.core :refer :all]
             [tictactoe.ai :refer :all]))
 
-(def one-move-x-win [["x" "x" 3]
+(def one-move-win [["x" "x" 3]
                    ["x" "o" "o"]
                    ["o" "x" "o"]])
 
@@ -14,8 +14,8 @@
                 ["o" "x" "x"]
                 ["o" "x" "o"]])
 
-(def two-move-o-win [["x" "o" 3]
-                     ["o" 5 "o"]
+(def two-move-o-win [["x" 2 3]
+                     ["x" 5 6]
                      ["o" "x" "o"]] )
 
 (def max-x-player {:strategy :max :piece "x" :starting-score -5})
@@ -39,13 +39,14 @@
     (should= 99 (value won-board max-x-player min-o-player 1)))
 
   (it "should score a won board for an opponent"
-    (should= -99 (value won-board "o" "x" 1)))
+    (should= -99 (value won-board {:strategy :max :piece "o" :starting-score -5}
+                                  {:strategy :min :piece "x" :starting-score 5} 1)))
 
   (it "should score a draw board"
     (should= 0 (value draw-board min-o-player max-x-player 1)))
 
   (it "should not score a game in progress"
-    (should= nil (value one-move-x-win min-o-player max-x-player 6)))
+    (should= nil (value one-move-win min-o-player max-x-player 6)))
 
   (it "should return a won board with a score"
     (should= 93 (minimax-score "x" "o" won-board 7)))
@@ -53,8 +54,8 @@
   (it "should return a cat's game board with a score"
     (should= 0 (minimax-score "x" "o" draw-board 7)))
 
-  (it "should score for a win in one move"
-    (should= 99 (minimax-score "x" "o" one-move-x-win 0)))
+  (it "should score for a loss in one move"
+    (should= -99 (minimax-score "x" "o" one-move-win 0)))
   
   (it "should score for a loss in two moves"
     (should= -98 (minimax-score "x" "o" two-move-o-win 0)))
@@ -70,11 +71,11 @@
                                          [7 "o" 9]] 0)))
   
   (it "should score a blank board"
-    (should= -95 (minimax-score "x" "o" [[1 2 3]
+    (should= 95 (minimax-score "x" "o" [["x" 2 3]
                                          [4 5 6]
                                          [7 8 9]] 0)))
   
   (it "should provide a value for all the moves"
-    (should= {4 99, 3 99, 2 97} (minimax-move "o" "x" [["x" 2 3]
+    (should= {4 99, 3 99, 2 97} (minimax-move "x" "o" [["x" 2 3]
                                                        [4 "o" "x"]
                                                        ["x" "o" "x"]]))))

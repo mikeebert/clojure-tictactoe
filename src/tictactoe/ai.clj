@@ -21,7 +21,7 @@
       (+ -100 depth))))
 
 (defn loss [opponent board depth]
-  (if (= opponent (winner board))
+  (if (= (:piece opponent) (winner board))
     (if (= :max (:strategy opponent))
       (- 100 depth)
       (+ -100 depth))))
@@ -49,7 +49,7 @@
                                                       depth))
   ([player opponent board spaces depth]
     (or (value board player opponent depth)
-        (let [new-board (place-move (first spaces) (:piece player) board)]
+        (let [new-board (place-move (first spaces) (:piece opponent) board)]
           (or (value new-board player opponent (inc depth))
               (minimax-score opponent player new-board (rest spaces) (inc depth)))))))
 
