@@ -1,7 +1,8 @@
 (ns tictactoe.console-runner-spec
   (:require [speclj.core :refer :all]
             [tictactoe.console-runner :refer :all]
-            [tictactoe.consoleui :refer [get-player-type get-human-move winning-message]]
+            [tictactoe.consoleui :refer [get-player-type get-human-move 
+                                         winning-message tie-message]]
             [tictactoe.board :refer [available-spaces]]
             [tictactoe.ai :refer [ai-move]]))
 
@@ -42,7 +43,7 @@
             board ["some_board"]]
         (should= ["X" [1 2 3]] (next-player-move player1 player2 board)))))
   
-   (it "should get the move if the next player is ) computer"
+   (it "should get the move if the next player is a computer"
     (with-redefs [println (constantly nil)
                   get-ai-move (fn [x y z] [x y z])]
       (let [player2 human-player-X
@@ -57,6 +58,21 @@
             board :board]
       (should= ["x" "o" :board] (get-ai-move p1 p2 board)))))
   
+  (it "should return the winner of a game if there is one"
+    (with-redefs [winning-message (fn [x] x)]
+      (should= "x" (end-of-game [["x" "x" "x"]
+                                 [4 5 6]
+                                 [7 8 9]]))))
+
+  (it "should return the cat's game message for a tie"
+    (with-redefs [tie-message (constantly :tied)]
+      (should= :tied (end-of-game [["x" "x" "o"]
+                                   ["o" "o" "x"]
+                                   ["x" "o" "x"]]))))
+
+  (it "should return nil for a game in progress"
+    (should= nil (end-of-game fresh-board)))
+
   (it "should start a game loop"
     (let [player1 human-player-X
           player2 {:symbol "O" :type :human}

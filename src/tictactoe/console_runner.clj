@@ -19,15 +19,18 @@
     (get-human-move (:symbol player) (available-spaces board))
     (get-ai-move (:symbol player) (:symbol next-player) board)))
 
+(defn end-of-game [board]
+ (if-let [winning-player (winner board)]
+  (winning-message winning-player)
+  (if (full? board)
+    (tie-message))))
+
 (defn game-loop [player next-player board]
     (let [move (next-player-move player next-player board)
           game-board (place-move move (:symbol player) board)]
       (display-board game-board)
-      (if-let [winning-player (winner game-board)]
-        (winning-message winning-player)
-        (if (full? game-board)
-          (tie-message)
-          (game-loop next-player player game-board)))))
+      (or (end-of-game game-board)
+          (game-loop next-player player game-board))))
 
 (defn start []
   (greeting)
