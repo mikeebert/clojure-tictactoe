@@ -67,4 +67,10 @@
   (it "should provide for a win in one move"
     (should= 4 (ai-move max-x-player min-o-player [["x" 2 "o"]
                                                    [4 "o" "x"]
-                                                   ["x" "o" "x"]]))))
+                                                   ["x" "o" "x"]])))
+  
+  (it "should choose a corner for an opening move"
+    (let [move (ai-move max-x-player min-o-player [[1 2 3]
+                                                   [4 5 6]
+                                                   [7 8 9]])]
+    (should (some #(= move %) [4 7 6 9])))))

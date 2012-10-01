@@ -44,15 +44,15 @@
 (defn minimax-score [player opponent board depth]
   (or (value board player opponent depth)
       (let [values (map #(minimax-score opponent player 
-                                        (place-move % (:piece opponent) board) (inc depth)) 
-                     (available-spaces board))]
+                                        (place-move % (:piece opponent) board) (inc depth))
+                      (available-spaces board))]
         (best-score opponent values))))
 
 (defn best-move [move-values]
   (first (first (sort-by val > move-values))))
 
 (defn minimax-move [maxplayer minplayer board]
-  (let [values (map #(minimax-score maxplayer minplayer 
+  (let [values (pmap #(minimax-score maxplayer minplayer 
                                     (place-move % (:piece maxplayer) board) 1) 
                     (available-spaces board))
         moves (available-spaces board)
