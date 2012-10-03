@@ -58,6 +58,12 @@
   (it "should score for a loss in two moves"
     (should= -98 (minimax-score max-x-player min-o-player one-move-win 1)))
 
+  (it "should choose the center as the second move if a corner is taken"
+    (let [move (ai-move max-x-player min-o-player [["o" 2 3]
+                                                   [4 5 6]
+                                                   [7 8 9]])]
+    (should (some #(= move %) [4 7 6 9]))))
+
   (it "should block a 'knight' set-up move"
     (let [move (ai-move max-x-player min-o-player [["o" 2 3]
                                                    [4 "x" 6]

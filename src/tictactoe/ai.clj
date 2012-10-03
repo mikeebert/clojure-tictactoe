@@ -10,10 +10,15 @@
     n))
 
 (defn set-max [piece]
-  {:strategy :max :piece piece :starting-score -5})
+  {:strategy :max :piece piece :starting-score -5 :best-score nil :alpha -100})
 
 (defn set-min [piece]
-  {:strategy :min :piece piece :starting-score 5})
+  {:strategy :min :piece piece :starting-score 5 :best-score nil :beta 100})
+
+;(defn terminal-node [board]
+  ;(if (winner board)
+    ;true)
+  ;(full? board))
 
 (defn win [player board depth]
   (if (= (:piece player) (winner board))
@@ -41,12 +46,21 @@
       (apply max all-values)
       (apply min all-values))))
 
-(defn minimax-score [player opponent board depth]
-  (or (value board player opponent depth)
-      (let [values (map #(minimax-score opponent player 
-                                        (place-move % (:piece opponent) board) (inc depth))
-                      (available-spaces board))]
-        (best-score opponent values))))
+(defn set-alpha-beta )
+
+(defn minimax-score 
+  ([player opponent board depth]
+  (if (> depth 5)
+    (or (value board player opponent depth) 0)
+    (or (value board player opponent depth)
+        ;(best-score opponent (map #(minimax-score opponent player 
+                                                  ;(place-move % (:piece opponent) board) 
+                                                  ;alpha beta (inc depth))
+                               ;(available-spaces board)))))
+        (let [values (map #(minimax-score opponent player 
+                                          (place-move % (:piece opponent) board) (inc depth))
+                        (available-spaces board))]
+              (best-score opponent values))))))
 
 (defn best-move [move-values]
   (first (first (sort-by val > move-values))))
