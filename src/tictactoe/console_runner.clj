@@ -23,14 +23,21 @@
  (if-let [winning-player (winner board)]
   (winning-message winning-player)
   (if (full? board)
-    (tie-message))))
+    (tie-message)))
+  (shutdown-agents))
+
+(defn game-over [board]
+  (if (winner board)
+    true
+    (full? board)))
 
 (defn game-loop [player next-player board]
     (let [move (next-player-move player next-player board)
           game-board (place-move move (:symbol player) board)]
       (display-board game-board)
-      (or (end-of-game game-board)
-          (game-loop next-player player game-board))))
+      (if (game-over game-board)
+        (end-of-game game-board)
+        (game-loop next-player player game-board))))
 
 (defn start []
   (greeting)

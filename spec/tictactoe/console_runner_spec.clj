@@ -12,6 +12,10 @@
                   [4 5 6]
                   [7 8 9]])
 
+(def tie-board [["x" "x" "o"]
+                ["o" "o" "x"]
+                ["x" "o" "x"]])
+
 (defn make-input [coll]
   (apply str (interleave coll (repeat "\n"))))
 
@@ -57,21 +61,17 @@
             p2 "o"
             board :board]
       (should= ["x" "o" :board] (get-ai-move p1 p2 board)))))
-  
-  (it "should return the winner of a game if there is one"
-    (with-redefs [winning-message (fn [x] x)]
-      (should= "x" (end-of-game [["x" "x" "x"]
-                                 [4 5 6]
-                                 [7 8 9]]))))
 
-  (it "should return the cat's game message for a tie"
-    (with-redefs [tie-message (constantly :tied)]
-      (should= :tied (end-of-game [["x" "x" "o"]
-                                   ["o" "o" "x"]
-                                   ["x" "o" "x"]]))))
+  (it "should return true for game-over if there is a winner"
+    (should= true (game-over [["x" "x" "x"]
+                              [4 5 6]
+                              [7 8 9]])))
+
+  (it "should return true for game-over if there is a tie"
+    (should= true (game-over tie-board)))
 
   (it "should return nil for a game in progress"
-    (should= nil (end-of-game fresh-board)))
+    (should= false (game-over fresh-board)))
 
   (it "should start a game loop"
     (let [player1 human-player-X
@@ -79,7 +79,8 @@
           board [[1 2 3][4 5 6][7 8 9]]]
       (with-in-str (make-input '(1 2 3 4 5 6 7))
         (with-redefs [println (constantly nil)
-                      winning-message (fn [x] x)]
-    (should= "X" (game-loop player1 player2 board)))))))
+                      winning-message (fn [x] x)
+                      shutdown-agents (constantly :ran-loop)]
+    (should= :ran-loop (game-loop player1 player2 board)))))))
   
   
